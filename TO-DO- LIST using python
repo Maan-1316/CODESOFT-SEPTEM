@@ -1,0 +1,97 @@
+# 99Define a list to store tasks
+tasks = []
+
+# Function to add a new task
+def add_task():
+    task = input("Enter a new task: ")
+    
+    while True:
+        priority = input("Enter the priority (High/Medium/Low): ").strip().capitalize()
+        if priority in ["High", "Medium", "Low"]:
+            break
+        else:
+            print("Invalid priority. Please enter High, Medium, or Low.")
+
+    while True:
+        due_date = input("Enter the due date (yyyy-mm-dd): ")
+        # Add your custom date validation logic here
+        if due_date:  # You can implement more comprehensive date validation
+            break
+        else:
+            print("Invalid date format. Please use yyyy-mm-dd format.")
+
+    tasks.append({
+        "Task": task,
+        "Priority": priority,
+        "Due Date": due_date
+    })
+    print("Task added successfully!")
+
+# Function to view all tasks
+def view_tasks():
+    if not tasks:
+        print("No tasks found.")
+    else:
+        print("\nTo-Do List:")
+        for index, task in enumerate(tasks, start=1):
+            print(f"{index}. Task: {task['Task']}, Priority: {task['Priority']}, Due Date: {task['Due Date']}")
+
+# Function to update a task
+def update_task():
+    view_tasks()
+    task_index = int(input("Enter the task number to update: "))
+    
+    if task_index < 1 or task_index > len(tasks):
+        print("Invalid task number.")
+    else:
+        task = tasks[task_index - 1]
+        new_task = input(f"Enter the updated task (current: {task['Task']}): ")
+        new_priority = input(f"Enter the updated priority (current: {task['Priority']}): ").strip().capitalize()
+        new_due_date = input(f"Enter the updated due date (current: {task['Due Date']}): ")
+
+        if new_task:
+            task["Task"] = new_task
+        if new_priority and new_priority in ["High", "Medium", "Low"]:
+            task["Priority"] = new_priority
+        if new_due_date:
+            # Add your custom date validation logic here
+            task["Due Date"] = new_due_date
+
+        print("Task updated successfully!")
+
+# Function to delete a task
+def delete_task():
+    view_tasks()
+    task_index = int(input("Enter the task number to delete: "))
+    
+    if task_index < 1 or task_index > len(tasks):
+        print("Invalid task number.")
+    else:
+        deleted_task = tasks.pop(task_index - 1)
+        print(f"Task '{deleted_task['Task']}' deleted successfully!")
+
+# Main program loop
+while True:
+    print("\n====== Wellcome to List Menu ======")
+    print("1. Add Task")
+    print("2. View Tasks")
+    print("3. Update Task")
+    print("4. Delete Task")
+    print("5. Quit")
+    print("=============================")
+
+    choice = input("Please enter your choice (1/2/3/4/5): ")
+
+    if choice == "1":
+        add_task()
+    elif choice == "2":
+        view_tasks()
+    elif choice == "3":
+        update_task()
+    elif choice == "4":
+        delete_task()
+    elif choice == "5":
+        print("Thank you using me !")
+        break
+    else:
+        print("\nInvalid choice. Please try again.")
