@@ -1,0 +1,165 @@
+import re
+
+contacts = {}
+contact_id_counter = 1
+
+
+# Function to add a new contact
+def add_contact():
+  global contact_id_counter
+  print("Add a New Contact")
+  name = input("Name: ")
+  phone = get_valid_phone_number(
+  )  # Get a valid phone number using input validation
+  email = get_valid_email()  # Get a valid email address using input validation
+  address = input("Address: ")
+
+  contact_id = contact_id_counter
+  contact_id_counter += 1
+
+  contacts[contact_id] = {
+      "Name": name,
+      "Phone": phone,
+      "Email": email,
+      "Address": address
+  }
+
+  print(f"Contact '{name}' added successfully!")
+
+
+# Function to get a valid phone number
+def get_valid_phone_number():
+  while True:
+    phone = input("Phone Number (XXXXXXXXXXX): ")
+    if re.match(r'^\d{3}\d{3}\d{5}$', phone):
+      return phone
+    else:
+      print(
+          "Invalid phone number format. Please use the format 'XXXXXXXXXXX'.")
+
+
+# Function to get a valid email address
+def get_valid_email():
+  while True:
+    email = input("Email: ")
+    if re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+      return email
+    else:
+      print(
+          "Invalid email address format. Please enter a valid email address.")
+
+
+# Function to view all contacts
+def view_contacts():
+  if not contacts:
+    print("No contacts found.")
+  else:
+    print("Contact List:")
+    for contact_id, contact_info in contacts.items():
+      print(
+          f"ID: {contact_id}, Name: {contact_info['Name']}, Phone: {contact_info['Phone']}, Email: {contact_info['Email']}, Address: {contact_info['Address']}"
+      )
+
+
+# Function to search for a contact by name or phone number
+def search_contact():
+  search_term = input("Enter the name or phone number to search for: ")
+  found_contacts = []
+
+  for contact_id, contact_info in contacts.items():
+    if search_term.lower() in contact_info['Name'].lower(
+    ) or search_term in contact_info['Phone']:
+      found_contacts.append((contact_id, contact_info))
+
+  if not found_contacts:
+    print("No matching contacts found.")
+  else:
+    print("Matching contacts:")
+    for contact_id, contact_info in found_contacts:
+      print(
+          f"ID: {contact_id}, Name: {contact_info['Name']}, Phone: {contact_info['Phone']}, Email: {contact_info['Email']}, Address: {contact_info['Address']}"
+      )
+      '''
+ Function to updating a contact (The automatically generates Id after adding each )
+contact so use id=1 for updating contact you saved first number and and for updating 
+remaining contact use the sequentical id like(1,2,3....)
+'''
+
+
+      # Function to update a contact
+def update_contact():
+  contact_id = int(input("Enter the ID of the contact to update: "))
+
+  if contact_id not in contacts:
+    print("Contact not found.")
+    return
+
+  updated_info = {}
+  print(f"Editing Contact '{contacts[contact_id]['Name']}'")
+  updated_info["Name"] = input("New Name (press Enter to keep it unchanged): "
+                               ) or contacts[contact_id]['Name']
+  updated_info["Phone"] = input(
+      "New Phone (press Enter to keep it unchanged): "
+  ) or contacts[contact_id]['Phone']
+  updated_info["Email"] = input(
+      "New Email (press Enter to keep it unchanged): "
+  ) or contacts[contact_id]['Email']
+  updated_info["Address"] = input(
+      "New Address (press Enter to keep it unchanged): "
+  ) or contacts[contact_id]['Address']
+
+  contacts[contact_id].update({k: v for k, v in updated_info.items() if v})
+  print("Contact updated successfully!")
+
+
+'''
+ Function to delete a contact (The automatically generates Id after adding each )
+contact so use id=1 for deleting contact you saved first number and and for deleting 
+remaining contact use the sequentical id like(1,2,3....)
+'''
+
+
+# Function to delete a contact
+def delete_contact():
+  contact_id = int(input("Enter the ID of the contact to delete: "))
+
+  if contact_id not in contacts:
+    print("Contact not found.")
+    return
+
+  contact_name = contacts[contact_id]["Name"]
+  del contacts[contact_id]
+  print(f"Contact '{contact_name}' deleted successfully!")
+
+
+# Main function
+def main():
+  while True:
+    print("Welcome to Contact Book Menu:")
+    print("1. Add Contact")
+    print("2. View Contact List")
+    print("3. Search Contact")
+    print("4. Update Contact")
+    print("5. Delete Contact")
+    print("6. Quit")
+    choice = input("Enter your choice (1/2/3/4/5/6): ")
+
+    if choice == "1":
+      add_contact()
+    elif choice == "2":
+      view_contacts()
+    elif choice == "3":
+      search_contact()
+    elif choice == "4":
+      update_contact()
+    elif choice == "5":
+      delete_contact()
+    elif choice == "6":
+      print("Goodbye!")
+      break
+    else:
+      print("Invalid choice. Please try again.")
+
+
+if __name__ == "__main__":
+  main()
